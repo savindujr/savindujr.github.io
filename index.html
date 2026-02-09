@@ -10,20 +10,33 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap");
       body {
-        font-family: "Inter", sans-serif;
+        font-family: "IBM Plex Mono", monospace;
+      }
+
+      .crt::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: repeating-linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.02) 1px,
+          transparent 1px,
+          transparent 3px
+        );
+        pointer-events: none;
+        z-index: 50;
       }
     </style>
   </head>
   <body
-    class="bg-gray-900 text-gray-100 min-h-screen p-6 md:p-12 transition-colors duration-300"
+    class="bg-black text-gray-200 min-h-screen p-6 md:p-12 tracking-tight crt bg-black text-gray-200"
   >
     <div class="max-w-3xl mx-auto">
       <!-- Header -->
-      <h1 class="text-3xl md:text-4xl font-bold mb-8 tracking-tight text-white">
-        Savindu Ranasinghe
-      </h1>
+      <h1 class="text-3xl md:text-4xl font-bold mb-8">Savindu Ranasinghe</h1>
 
       <!-- Introduction -->
       <div class="space-y-6 mb-12">
@@ -41,19 +54,17 @@
       </div>
 
       <h2
-        class="text-[20px] uppercase tracking-wider text-gray-400 font-semibold mb-4"
+        class="text-sm uppercase tracking-[0.3em] text-gray-400 mb-4 font-bold"
       >
         Work
       </h2>
 
       <!-- Current Position -->
       <div class="mb-10">
-        <h2
-          class="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-3"
-        >
+        <h2 class="text-sm uppercase tracking-[0.3em] text-gray-400 mb-4">
           Currently
         </h2>
-        <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700/50">
+        <div class="bg-black border p-4 rounded-lg border border-gray-600">
           <p class="text-gray-200 font-medium mb-1">
             Volunteer - Software Engineering and IT Support
           </p>
@@ -75,14 +86,12 @@
 
       <!-- Previous Positions -->
       <div class="mb-10">
-        <h2
-          class="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-4"
-        >
+        <h2 class="text-sm uppercase tracking-[0.3em] text-gray-400 mb-4">
           Previous
         </h2>
         <div class="space-y-4">
           <!-- Position 1 -->
-          <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700/50">
+          <div class="bg-black border p-4 rounded-lg border border-gray-600">
             <div class="flex justify-between items-start mb-2">
               <div>
                 <p class="text-gray-200 font-medium">
@@ -100,7 +109,7 @@
           </div>
 
           <!-- Position 2 -->
-          <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700/50">
+          <div class="bg-black border p-4 rounded-lg border border-gray-600">
             <div class="flex justify-between items-start mb-2">
               <div>
                 <p class="text-gray-200 font-medium">Intern - Data Science</p>
@@ -116,7 +125,7 @@
           </div>
 
           <!-- Position 3 -->
-          <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700/50">
+          <div class="bg-black border p-4 rounded-lg border border-gray-600">
             <div class="flex justify-between items-start mb-2">
               <div>
                 <p class="text-gray-200 font-medium">
@@ -137,13 +146,11 @@
 
       <!-- Education Section -->
       <div class="mb-10">
-        <h2
-          class="text-[20px] uppercase tracking-wider text-gray-400 font-semibold mb-4"
-        >
+        <h2 class="text-sm uppercase tracking-[0.3em] text-gray-400 mb-4">
           Education
         </h2>
 
-        <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700/50">
+        <div class="bg-black border p-4 rounded-lg border border-gray-600">
           <div class="flex justify-between items-start mb-2">
             <div>
               <p class="text-gray-200 font-medium">
@@ -159,7 +166,7 @@
           </div>
         </div>
 
-        <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700/50">
+        <div class="bg-black border p-4 rounded-lg border border-gray-600">
           <div class="flex justify-between items-start mb-2">
             <div>
               <p class="text-gray-200 font-medium">
@@ -180,13 +187,11 @@
 
       <!-- Certification Section -->
       <div class="mb-10">
-        <h2
-          class="text-[20px] uppercase tracking-wider text-gray-400 font-semibold mb-4"
-        >
+        <h2 class="text-sm uppercase tracking-[0.3em] text-gray-400 mb-4">
           Certifications
         </h2>
 
-        <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700/50">
+        <div class="bg-black border p-4 rounded-lg border border-gray-600">
           <div class="flex justify-between items-start mb-2">
             <div>
               <p class="text-gray-200 font-medium">
@@ -207,7 +212,7 @@
           </div>
         </div>
 
-        <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700/50">
+        <div class="bg-black border p-4 rounded-lg border border-gray-600">
           <div class="flex justify-between items-start mb-2">
             <div>
               <p class="text-gray-200 font-medium">
@@ -231,13 +236,11 @@
 
       <!-- Publications Div -->
       <div class="mb-10">
-        <h2
-          class="text-[20px] uppercase tracking-wider text-gray-400 font-semibold mb-4"
-        >
+        <h2 class="text-sm uppercase tracking-[0.3em] text-gray-400 mb-4">
           Publications
         </h2>
 
-        <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700/50">
+        <div class="bg-black border p-4 rounded-lg border border-gray-600">
           <div class="flex justify-between items-start mb-2">
             <div>
               <p class="text-gray-200 font-medium">
@@ -277,6 +280,12 @@
           class="inline-block"
         />
       </div>
+
+      <p
+        class="text-xs text-gray-500 uppercase tracking-widest mt-10 text-center"
+      >
+        Available for IT, Cybersecurity, and Graduate-Level Technical Roles
+      </p>
 
       <!-- Optional: Add a subtle gradient or pattern for visual interest -->
       <div class="fixed inset-0 -z-10 overflow-hidden">
