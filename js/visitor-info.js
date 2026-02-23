@@ -50,31 +50,6 @@ class VisitorInfo {
           <span class="text-gray-500 text-xs w-20">IP_ADDR</span>
           <span class="text-green-400">${data.query}</span>
         </div>
-        <div class="flex items-start">
-          <span class="text-green-400 mr-3">$></span>
-          <span class="text-gray-500 text-xs w-20">LOCATION</span>
-          <span class="text-gray-300">${data.city}, ${data.country}</span>
-        </div>
-        <div class="flex items-start">
-          <span class="text-green-400 mr-3">$></span>
-          <span class="text-gray-500 text-xs w-20">REGION</span>
-          <span class="text-gray-300">${data.regionName}</span>
-        </div>
-        <div class="flex items-start">
-          <span class="text-green-400 mr-3">$></span>
-          <span class="text-gray-500 text-xs w-20">ISP</span>
-          <span class="text-gray-300">${data.isp || 'Unknown'}</span>
-        </div>
-        <div class="flex items-start">
-          <span class="text-green-400 mr-3">$></span>
-          <span class="text-gray-500 text-xs w-20">COORDS</span>
-          <span class="text-gray-300">${data.lat}, ${data.lon}</span>
-        </div>
-        <div class="flex items-start">
-          <span class="text-green-400 mr-3">$></span>
-          <span class="text-gray-500 text-xs w-20">TIMEZONE</span>
-          <span class="text-gray-300">${data.timezone}</span>
-        </div>
       </div>
     `;
     
