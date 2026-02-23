@@ -1,0 +1,90 @@
+/* Import fonts */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap");
+
+/* Base styles */
+body {
+  font-family: "IBM Plex Mono", monospace;
+}
+
+/* CRT effect */
+.crt::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 50;
+}
+
+p {
+  hyphens: none;
+}
+
+/* Visitor info terminal styling */
+.terminal-prompt::before {
+  content: "$ ";
+  color: #4ade80;
+  font-weight: bold;
+}
+
+.terminal-response {
+  border-left: 2px solid #4ade80;
+}
+
+.glow-text {
+  text-shadow: 0 0 5px rgba(74, 222, 128, 0.3);
+}
+
+.visitor-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 16px;
+  align-items: baseline;
+}
+
+.visitor-label {
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.7rem;
+}
+
+.visitor-value {
+  color: #4ade80;
+  font-weight: 400;
+  word-break: break-word;
+}
+
+.blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Custom scrollbar for terminal feel */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4ade80;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #22c55e;
+}

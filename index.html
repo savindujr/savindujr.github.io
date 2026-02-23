@@ -8,32 +8,11 @@
     <!-- favicon -->
     <link rel="icon" type="image/png" href="assets/favicon.png" />
 
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap");
-      body {
-        font-family: "IBM Plex Mono", monospace;
-      }
 
-      .crt::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background: repeating-linear-gradient(
-          to bottom,
-          rgba(255, 255, 255, 0.02),
-          rgba(255, 255, 255, 0.02) 1px,
-          transparent 1px,
-          transparent 3px
-        );
-        pointer-events: none;
-        z-index: 50;
-      }
-
-      p {
-        hyphens: none;
-      }
-    </style>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles/main.css" />
   </head>
   <body
     class="bg-black text-gray-200 min-h-screen p-6 md:p-12 tracking-tight crt"
@@ -41,6 +20,7 @@
     <div class="max-w-3xl mx-auto">
       <!-- Header -->
       <h1 class="text-3xl md:text-4xl font-bold mb-8">Savindu Ranasinghe</h1>
+
       <p class="text-xs uppercase tracking-widest text-gray-500 mb-6">
         Software Engineering • Information Security • Network Security • Data
         Science
@@ -68,6 +48,7 @@
         </p>
       </div>
 
+      <!-- Work Section -->
       <h1
         class="text-sm uppercase tracking-[0.3em] text-gray-300 mb-4 font-semibold border-l-4 border-gray-500 pl-3"
       >
@@ -281,19 +262,57 @@
                   IEEE Paper
                 </a>
               </p>
-              <p>
+              <p class="text-xs text-gray-400 mt-2 leading-relaxed">
                 O. Mendis, A. Perera, S. Ranasinghe and S. Chandrasiri,
                 "GreenEye: Smart Consulting System for Domestic Farmers," 2022
                 4th International Conference on Advancements in Computing
                 (ICAC), Colombo, Sri Lanka, 2022, pp. 363-368, doi:
-                10.1109/ICAC57685.2022.10025193. keywords: {Economics;Image
-                processing;Green products;Soil moisture;Crops;Moisture;Mobile
-                applications;Domestic Farmers;Maturity Level;Plant
-                Identification;Smart Consulting;Stress-factors;Soil Moisture},
+                10.1109/ICAC57685.2022.10025193.
               </p>
             </div>
             <span class="text-gray-500 text-sm whitespace-nowrap">2022</span>
           </div>
+        </div>
+      </div>
+
+      <!-- Age Widget -->
+      <div
+        id="years-counter"
+        class="text-center w-full my-8 text-gray-400 text-sm"
+      ></div>
+
+      <!-- Visitor Info Widget -->
+      <div
+        class="bg-black border border-gray-800 rounded-lg p-6 mb-8 font-mono"
+      >
+        <!-- Terminal header -->
+        <div
+          class="flex items-center space-x-2 mb-4 pb-2 border-b border-gray-800"
+        >
+          <div class="flex space-x-1.5">
+            <div class="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/50"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-green-500/50"></div>
+          </div>
+          <span class="text-xs text-gray-600">visitor@portfolio:~$</span>
+        </div>
+
+        <!-- Visitor info content -->
+        <div id="visitor-info">
+          <div class="flex items-center space-x-2 text-gray-500">
+            <span class="text-green-400">$</span>
+            <span>fetching visitor data...</span>
+            <span class="blink text-green-400">▊</span>
+          </div>
+        </div>
+
+        <!-- Terminal bottom line -->
+        <div
+          class="mt-4 pt-2 border-t border-gray-800 flex items-center text-xs text-gray-600"
+        >
+          <span class="text-green-400 mr-2">></span>
+          <span id="connection-status" class="mr-2">●</span>
+          <span id="timestamp"></span>
         </div>
       </div>
 
@@ -303,7 +322,7 @@
         Available for IT, Cybersecurity, and Graduate-Level Technical Roles
       </p>
 
-      <!-- Optional: Add a subtle gradient or pattern for visual interest -->
+      <!-- Background effects -->
       <div class="fixed inset-0 -z-10 overflow-hidden">
         <div
           class="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl"
@@ -313,5 +332,9 @@
         ></div>
       </div>
     </div>
+
+    <!-- JavaScript files -->
+    <script src="js/age-counter.js"></script>
+    <script src="js/visitor-info.js"></script>
   </body>
 </html>
