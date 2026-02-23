@@ -69,11 +69,7 @@ class VisitorInfo {
             <span class="text-gray-500 text-xs w-20">IP_ADDR</span>
             <span class="text-green-400">${data.ip}</span>
           </div>
-          <div class="flex items-start">
-            <span class="text-green-400 mr-3">$></span>
-            <span class="text-gray-500 text-xs w-20">STATUS</span>
-            <span class="text-yellow-400">Location unavailable (limited mode)</span>
-          </div>
+
         </div>
       `;
       
