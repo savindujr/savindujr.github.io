@@ -13,18 +13,31 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles/main.css" />
+    
+    <style>
+      /* Simple sticky header */
+      .sticky-header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: black;
+        padding-top: 1.5rem;
+      }
+    </style>
   </head>
   <body
     class="bg-black text-gray-200 min-h-screen p-6 md:p-12 tracking-tight crt"
   >
     <div class="max-w-3xl mx-auto">
-      <!-- Header -->
-      <h1 class="text-3xl md:text-4xl font-bold mb-8">Savindu Ranasinghe</h1>
+      <!-- Static Header -->
+      <div class="sticky-header">
+        <h1 class="text-3xl md:text-4xl font-bold mb-8 text-green-400">Savindu Ranasinghe</h1>
 
-      <p class="text-xs uppercase tracking-widest text-gray-500 mb-6">
-        Software Engineering • Information Security • Network Security • Data
-        Science
-      </p>
+        <p class="text-xs uppercase tracking-widest text-gray-500 mb-6">
+          Software Engineering • Information Security • Network Security • Data
+          Science
+        </p>
+      </div>
 
       <!-- Introduction -->
       <div class="space-y-6 mb-12 max-w-3xl">
