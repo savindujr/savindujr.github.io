@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scripts & Projects — Savindu Ranasinghe</title>
+
+    <link rel="icon" type="image/gif" href="assets/bc.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles/main.css" />
+
+    <style>
+      /* ── LAYOUT ───────────────────────────────────────────── */
+      :root { --nav-w: 200px; }
+
+      .side-nav {
+        width: var(--nav-w);
+        flex-shrink: 0;
+        position: fixed;
+        left: 0; top: 0;
+        height: 100vh;
+        background: #000;
+        border-right: 1px solid #1f2937;
+        display: flex;
+        flex-direction: column;
+        padding: 2rem 1.25rem;
+        z-index: 100;
+        font-family: "IBM Plex Mono", monospace;
+        overflow-y: auto;
+        transition: transform 0.25s ease;
+      }
+
+      .main-content {
+        margin-left: var(--nav-w);
+        flex: 1;
+        min-width: 0;
+        padding: 2rem 3rem;
+      }
+
+      /* ── NAV INTERNALS ────────────────────────────────────── */
+      .nav-logo {
+        font-size: 0.65rem;
+        color: #4ade80;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #1f2937;
+      }
+
+      .side-nav a {
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: #6b7280;
+        text-decoration: none;
+        padding: 0.45rem 0.5rem;
+        border-radius: 3px;
+        transition: color 0.2s, background 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.15rem;
+      }
+      .side-nav a::before { content: "›"; color: #374151; transition: color 0.2s; }
+      .side-nav a:hover,
+      .side-nav a.active  { color: #4ade80; background: rgba(74,222,128,0.05); }
+      .side-nav a:hover::before,
+      .side-nav a.active::before { color: #4ade80; }
+
+      .nav-section-label {
+        font-size: 0.55rem;
+        color: #374151;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        margin: 1rem 0 0.4rem 0.5rem;
+      }
+
+      .nav-external {
+        margin-top: auto;
+        padding-top: 1rem;
+        border-top: 1px solid #1f2937;
+      }
+
+      /* ── STICKY HEADER ────────────────────────────────────── */
+      .sticky-header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: black;
+        padding-top: 1.5rem;
+      }
+
+      /* ── HAMBURGER ────────────────────────────────────────── */
+      .hamburger {
+        display: none;
+        position: fixed;
+        top: 1rem; left: 1rem;
+        z-index: 200;
+        background: #000;
+        border: 1px solid #374151;
+        border-radius: 4px;
+        padding: 0.4rem 0.6rem;
+        cursor: pointer;
+        color: #4ade80;
+        font-size: 1.1rem;
+        line-height: 1;
+      }
+
+      .nav-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.75);
+        z-index: 99;
+      }
+      .nav-overlay.open { display: block; }
+
+      /* ── FILTER CHIPS (mobile fallback) ───────────────────── */
+      .filter-chips {
+        display: none;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-bottom: 1.25rem;
+      }
+      .filter-chips button {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0.3rem 0.75rem;
+        border-radius: 3px;
+        border: 1px solid #374151;
+        background: #000;
+        color: #6b7280;
+        cursor: pointer;
+        transition: color 0.2s, border-color 0.2s;
+      }
+      .filter-chips button.active,
+      .filter-chips button:hover { color: #4ade80; border-color: #4ade80; }
+
+      /* ── TABLET ───────────────────────────────────────────── */
+      @media (max-width: 1024px) {
+        :root { --nav-w: 180px; }
+        .main-content { padding: 1.5rem 2rem; }
+      }
+
+      /* ── MOBILE ───────────────────────────────────────────── */
+      @media (max-width: 640px) {
+        .side-nav {
+          transform: translateX(-100%);
+        }
+        .side-nav.open { transform: translateX(0); }
+
+        .main-content {
+          margin-left: 0;
+          padding: 1rem 1.1rem 2rem;
+        }
+
+        .hamburger { display: flex; align-items: center; justify-content: center; }
+
+        /* Show inline filter chips on mobile instead of sidebar filters */
+        .filter-chips { display: flex; }
+        .sidebar-filters { display: none; }
+      }
+
+      /* ── SCRIPT CARDS ─────────────────────────────────────── */
+      .script-card {
+        background: #000;
+        border: 1px solid #1f2937;
+        border-radius: 8px;
+        padding: 1.25rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        font-family: "IBM Plex Mono", monospace;
+      }
+      .script-card:hover {
+        border-color: #4ade80;
+        box-shadow: 0 0 12px rgba(74,222,128,0.06);
+      }
+
+      /* Card header flex wraps gracefully on small screens */
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.5rem;
+      }
+
+      .script-card .tag {
+        display: inline-block;
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0.15rem 0.5rem;
+        border-radius: 3px;
+        border: 1px solid #1f2937;
+        color: #6b7280;
+        margin-right: 0.3rem;
+        margin-top: 0.3rem;
+      }
+      .script-card .tag.python     { border-color: #3b5998; color: #7da3e0; }
+      .script-card .tag.bash       { border-color: #3d5a3e; color: #4ade80; }
+      .script-card .tag.powershell { border-color: #5a3d7a; color: #c084fc; }
+      .script-card .tag.network    { border-color: #5a4a1f; color: #fbbf24; }
+      .script-card .tag.soc        { border-color: #5a1f1f; color: #f87171; }
+
+      .status-dot {
+        display: inline-block;
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        margin-right: 6px;
+        vertical-align: middle;
+        flex-shrink: 0;
+      }
+      .status-dot.active  { background: #4ade80; box-shadow: 0 0 6px #4ade80; }
+      .status-dot.wip     { background: #fbbf24; }
+      .status-dot.planned { background: #374151; }
+
+      .typed-text::after {
+        content: "▊";
+        animation: blink 1s step-end infinite;
+        color: #4ade80;
+      }
+    </style>
+  </head>
+  <body class="bg-black text-gray-200 min-h-screen tracking-tight crt">
+
+    <!-- Mobile hamburger -->
+    <button class="hamburger" id="hamburger" aria-label="Open nav">☰</button>
+    <div class="nav-overlay" id="nav-overlay"></div>
+
+    <!-- Side Navigation -->
+    <nav class="side-nav" id="side-nav">
+      <div class="nav-logo">SR // Portfolio</div>
+
+      <div class="nav-section-label">Pages</div>
+      <a href="index.html">~/home</a>
+      <a href="scripts.html" class="active">~/scripts</a>
+
+      <div class="nav-section-label sidebar-filters">Filter</div>
+      <div class="sidebar-filters">
+        <a href="#" onclick="filterScripts('all'); return false;" id="filter-all" class="active">All</a>
+        <a href="#" onclick="filterScripts('python'); return false;" id="filter-python">Python</a>
+        <a href="#" onclick="filterScripts('bash'); return false;" id="filter-bash">Bash</a>
+        <a href="#" onclick="filterScripts('network'); return false;" id="filter-network">Network</a>
+        <a href="#" onclick="filterScripts('soc'); return false;" id="filter-soc">SOC</a>
+      </div>
+
+      <div class="nav-external">
+        <div class="nav-section-label">Links</div>
+        <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="main-content" id="main-content">
+    <div class="max-w-3xl">
+
+      <!-- Header -->
+      <div class="sticky-header">
+        <h1 class="text-3xl md:text-4xl font-bold mb-3 text-green-400 typed-text">Scripts & Projects</h1>
+        <p class="text-xs uppercase tracking-widest text-gray-500 mb-6">
+          Security Tools • Automation • Lab Work • CTF Write-ups
+        </p>
+      </div>
+
+      <!-- Mobile filter chips (hidden on desktop, shown on mobile) -->
+      <div class="filter-chips" id="filter-chips">
+        <button onclick="filterScripts('all')" class="active" data-filter="all">All</button>
+        <button onclick="filterScripts('python')" data-filter="python">Python</button>
+        <button onclick="filterScripts('bash')" data-filter="bash">Bash</button>
+        <button onclick="filterScripts('network')" data-filter="network">Network</button>
+        <button onclick="filterScripts('soc')" data-filter="soc">SOC</button>
+      </div>
+
+      <!-- Intro terminal block -->
+      <div class="bg-black border border-gray-800 rounded-lg p-5 mb-10 font-mono">
+        <div class="flex items-center space-x-2 mb-3 pb-2 border-b border-gray-800">
+          <div class="flex space-x-1.5">
+            <div class="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/50"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-green-500/50"></div>
+          </div>
+          <span class="text-xs text-gray-600">savindu@kali:~/projects$</span>
+        </div>
+        <p class="text-green-400 text-sm mb-1"><span class="text-gray-500">$</span> ls -la ./projects</p>
+        <p class="text-gray-400 text-xs leading-relaxed mt-2">
+          Hands-on tools and scripts built during self-study, TryHackMe labs, and home lab practice.<br/>
+          All projects are hosted on GitHub. Status: <span class="text-green-400">●</span> Active &nbsp; <span class="text-yellow-400">●</span> WIP &nbsp; <span class="text-gray-600">●</span> Planned
+        </p>
+      </div>
+
+      <!-- Scripts Grid -->
+      <div id="scripts-grid" class="space-y-4 mb-12">
+
+        <!-- CARD 1 -->
+        <div class="script-card" data-tags="python soc">
+          <div class="card-header">
+            <div>
+              <span class="status-dot active"></span>
+              <span class="text-gray-200 font-medium text-sm">Log Parser & Anomaly Detector</span>
+            </div>
+            <a href="https://github.com/YOUR_USERNAME/log-parser" target="_blank" rel="noopener"
+               class="text-blue-400 text-xs hover:text-blue-300 hover:underline transition-colors whitespace-nowrap">
+              View on GitHub →
+            </a>
+          </div>
+          <p class="text-gray-400 text-xs leading-relaxed mb-3">
+            Python script that parses Linux auth logs and Windows Event Logs, flags suspicious patterns 
+            (brute force attempts, privilege escalation), and outputs a structured CSV report. 
+            Built as part of SOC Level 1 TryHackMe path practice.
+          </p>
+          <div>
+            <span class="tag python">Python</span>
+            <span class="tag soc">SOC</span>
+            <span class="tag">Log Analysis</span>
+            <span class="tag">TryHackMe</span>
+          </div>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="script-card" data-tags="python network">
+          <div class="card-header">
+            <div>
+              <span class="status-dot active"></span>
+              <span class="text-gray-200 font-medium text-sm">Network Port Scanner</span>
+            </div>
+            <a href="https://github.com/YOUR_USERNAME/port-scanner" target="_blank" rel="noopener"
+               class="text-blue-400 text-xs hover:text-blue-300 hover:underline transition-colors whitespace-nowrap">
+              View on GitHub →
+            </a>
+          </div>
+          <p class="text-gray-400 text-xs leading-relaxed mb-3">
+            Lightweight Python port scanner using raw sockets. Supports TCP SYN scanning, 
+            service banner grabbing, and multi-threaded target sweeps. Built to understand 
+            how Nmap works under the hood.
+          </p>
+          <div>
+            <span class="tag python">Python</span>
+            <span class="tag network">Network</span>
+            <span class="tag">Reconnaissance</span>
+          </div>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="script-card" data-tags="bash network">
+          <div class="card-header">
+            <div>
+              <span class="status-dot wip"></span>
+              <span class="text-gray-200 font-medium text-sm">Home Lab Setup Script</span>
+            </div>
+            <a href="https://github.com/YOUR_USERNAME/homelab-setup" target="_blank" rel="noopener"
+               class="text-blue-400 text-xs hover:text-blue-300 hover:underline transition-colors whitespace-nowrap">
+              View on GitHub →
+            </a>
+          </div>
+          <p class="text-gray-400 text-xs leading-relaxed mb-3">
+            Bash automation to provision a VirtualBox home lab — spins up pfSense firewall, 
+            Windows Server AD, and Kali Linux attacker VM with pre-configured network segments. 
+            Documented setup for practice and demonstration.
+          </p>
+          <div>
+            <span class="tag bash">Bash</span>
+            <span class="tag network">Network</span>
+            <span class="tag">Active Directory</span>
+            <span class="tag">Home Lab</span>
+          </div>
+        </div>
+
+        <!-- CARD 4 -->
+        <div class="script-card" data-tags="python soc">
+          <div class="card-header">
+            <div>
+              <span class="status-dot wip"></span>
+              <span class="text-gray-200 font-medium text-sm">SIEM Alert Triage Automation</span>
+            </div>
+            <a href="https://github.com/YOUR_USERNAME/siem-triage" target="_blank" rel="noopener"
+               class="text-blue-400 text-xs hover:text-blue-300 hover:underline transition-colors whitespace-nowrap">
+              View on GitHub →
+            </a>
+          </div>
+          <p class="text-gray-400 text-xs leading-relaxed mb-3">
+            Python script that pulls alerts from a local Wazuh SIEM instance, scores them 
+            by severity using MITRE ATT&CK mappings, and auto-drafts incident tickets. 
+            Simulates a Tier 1 SOC analyst triage workflow.
+          </p>
+          <div>
+            <span class="tag python">Python</span>
+            <span class="tag soc">SOC</span>
+            <span class="tag">Wazuh</span>
+            <span class="tag">MITRE ATT&CK</span>
+          </div>
+        </div>
+
+        <!-- CARD 5 — Placeholder -->
+        <div class="script-card" data-tags="network">
+          <div class="card-header">
+            <div>
+              <span class="status-dot planned"></span>
+              <span class="text-gray-200 font-medium text-sm">Vulnerability Scanner — coming soon</span>
+            </div>
+            <span class="text-gray-600 text-xs whitespace-nowrap">In progress</span>
+          </div>
+          <p class="text-gray-400 text-xs leading-relaxed mb-3">
+            Planned: A lightweight Python-based vulnerability scanner integrating CVE lookups 
+            against discovered service banners. Inspired by Hack The Box enumeration methodology.
+          </p>
+          <div>
+            <span class="tag network">Network</span>
+            <span class="tag">CVE</span>
+            <span class="tag">HTB</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Write-ups section -->
+      <h2 class="text-sm uppercase tracking-[0.3em] text-gray-300 mb-4 font-semibold border-l-4 border-gray-500 pl-3">
+        CTF & Lab Write-ups
+      </h2>
+
+      <div class="space-y-3 mb-12">
+        <div class="bg-black border border-gray-800 rounded-lg p-4 hover:border-green-900 transition-colors">
+          <div class="card-header">
+            <div>
+              <p class="text-gray-200 text-sm font-medium">TryHackMe — SOC Level 1 Path</p>
+              <p class="text-gray-500 text-xs mt-0.5">Network analysis, SIEM basics, phishing analysis, endpoint security</p>
+            </div>
+            <a href="https://medium.com/@YOUR_USERNAME" target="_blank" rel="noopener"
+               class="text-blue-400 text-xs hover:text-blue-300 hover:underline transition-colors whitespace-nowrap">
+              Read Write-up →
+            </a>
+          </div>
+        </div>
+
+        <div class="bg-black border border-gray-800 rounded-lg p-4 hover:border-green-900 transition-colors">
+          <div class="card-header">
+            <div>
+              <p class="text-gray-200 text-sm font-medium">Hack The Box — Starting Point Machines</p>
+              <p class="text-gray-500 text-xs mt-0.5">Enumeration, privilege escalation, web vulnerabilities</p>
+            </div>
+            <a href="https://medium.com/@YOUR_USERNAME" target="_blank" rel="noopener"
+               class="text-blue-400 text-xs hover:text-blue-300 hover:underline transition-colors whitespace-nowrap">
+              Read Write-up →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-xs text-gray-500 uppercase tracking-widest mt-10 text-center mb-10">
+        Available for IT, Cybersecurity, and Graduate-Level Technical Roles
+      </p>
+
+      <!-- Background effects -->
+      <div class="fixed inset-0 -z-10 overflow-hidden">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl"></div>
+      </div>
+
+    </div>
+    </div>
+
+    <script>
+      const hamburger = document.getElementById('hamburger');
+      const sideNav   = document.getElementById('side-nav');
+      const overlay   = document.getElementById('nav-overlay');
+
+      hamburger.addEventListener('click', () => {
+        sideNav.classList.toggle('open');
+        overlay.classList.toggle('open');
+      });
+      overlay.addEventListener('click', () => {
+        sideNav.classList.remove('open');
+        overlay.classList.remove('open');
+      });
+      sideNav.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          sideNav.classList.remove('open');
+          overlay.classList.remove('open');
+        });
+      });
+
+      function filterScripts(tag) {
+        const cards = document.querySelectorAll('#scripts-grid .script-card');
+        cards.forEach(card => {
+          const tags = card.getAttribute('data-tags') || '';
+          card.style.display = (tag === 'all' || tags.includes(tag)) ? '' : 'none';
+        });
+
+        // Sidebar filter links
+        document.querySelectorAll('[id^="filter-"]').forEach(el => el.classList.remove('active'));
+        const sideEl = document.getElementById('filter-' + tag);
+        if (sideEl) sideEl.classList.add('active');
+
+        // Mobile chip buttons
+        document.querySelectorAll('#filter-chips button').forEach(btn => {
+          btn.classList.toggle('active', btn.getAttribute('data-filter') === tag);
+        });
+      }
+    </script>
+  </body>
+</html>
