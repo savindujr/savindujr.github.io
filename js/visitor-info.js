@@ -1,132 +1,43 @@
-/**
- * Visitor Info - Fetches and displays visitor information
- * Uses ip-api.com with ipify.org fallback
- */
+(function () {
+    const infoEl = document.getElementById("visitorInfo");
+    const statusEl = document.getElementById("connectionStatus");
+    const timeEl = document.getElementById("terminalTimestamp");
 
-class VisitorInfo {
-  constructor(elementId) {
-    this.elementId = elementId;
-    this.connectionStatusId = 'connection-status';
-    this.timestampId = 'timestamp';
-  }
-
-  // Main fetch function
-  async fetchVisitorInfo() {
-    try {
-      // Try primary API first
-      const data = await this.fetchFromPrimaryAPI();
-      if (data) {
-        this.renderSuccess(data);
-      } else {
-        throw new Error('Primary API failed');
-      }
-    } catch (error) {
-      console.warn('Primary API failed, trying fallback:', error);
-      await this.fallbackToIPOnly();
+    async function fetchVisitorInfo() {
+        try {
+            const res = await fetch("https://ipapi.co/json/");
+            if (!res.ok) throw new Error("primary lookup failed");
+            const data = await res.json();
+            if (!data || data.error) throw new Error("primary lookup failed");
+            infoEl.textContent = `$ IP_ADDR  ${data.ip}`;
+        } catch (err) {
+            try {
+                const res = await fetch("https://api.ipify.org?format=json");
+                const data = await res.json();
+                infoEl.textContent = `$ IP_ADDR  ${data.ip}`;
+            } catch (err2) {
+                infoEl.textContent = "$ Unable to fetch visitor data";
+            }
+        }
     }
-  }
 
-  // Primary API (ip-api.com)
-  async fetchFromPrimaryAPI() {
-    try {
-      const response = await fetch(
-        'http://ip-api.com/json/?fields=status,message,country,regionName,city,isp,org,query,lat,lon,timezone'
-      );
-      const data = await response.json();
-      
-      return data.status === 'success' ? data : null;
-    } catch (error) {
-      console.error('Primary API error:', error);
-      return null;
+    function updateConnectionStatus() {
+        const isOnline = navigator.onLine;
+        statusEl.textContent = isOnline ? "● ONLINE" : "● OFFLINE";
     }
-  }
 
-  // Render successful data
-  renderSuccess(data) {
-    const infoHTML = `
-      <div class="space-y-2">
-        <div class="flex items-start">
-          <span class="text-green-400 mr-3">$></span>
-          <span class="text-gray-500 text-xs w-20">IP_ADDR</span>
-          <span class="text-green-400">${data.query}</span>
-        </div>
-      </div>
-    `;
-    
-    document.getElementById(this.elementId).innerHTML = infoHTML;
-  }
-
-  // Fallback to IP-only service
-  async fallbackToIPOnly() {
-    try {
-      const response = await fetch('https://api.ipify.org?format=json');
-      const data = await response.json();
-      
-      const fallbackHTML = `
-        <div class="space-y-2">
-          <div class="flex items-start">
-            <span class="text-green-400 mr-3">$></span>
-            <span class="text-gray-500 text-xs w-20">IP_ADDR</span>
-            <span class="text-green-400">${data.ip}</span>
-          </div>
-
-        </div>
-      `;
-      
-      document.getElementById(this.elementId).innerHTML = fallbackHTML;
-    } catch (error) {
-      this.renderError('Failed to fetch visitor data');
+    function updateTimestamp() {
+        const utcTime = new Date().toLocaleTimeString("en-GB", {
+            timeZone: "UTC",
+            hour12: false,
+        });
+        timeEl.textContent = utcTime + " UTC";
     }
-  }
 
-  // Render error state
-  renderError(message) {
-    document.getElementById(this.elementId).innerHTML = `
-      <div class="flex items-start">
-        <span class="text-red-400 mr-3">⛔</span>
-        <span class="text-red-400/70">${message}</span>
-      </div>
-    `;
-  }
-
-  // Update timestamp
-  updateTimestamp() {
-    const now = new Date();
-    const timestampElement = document.getElementById(this.timestampId);
-    if (timestampElement) {
-      timestampElement.textContent = now.toLocaleTimeString() + ' UTC';
-    }
-  }
-
-  // Update connection status
-  updateConnectionStatus() {
-    const statusElement = document.getElementById(this.connectionStatusId);
-    if (statusElement) {
-      const isOnline = navigator.onLine;
-      statusElement.textContent = isOnline ? '● ONLINE' : '● OFFLINE';
-      statusElement.className = isOnline ? 'text-green-400 mr-2' : 'text-red-400 mr-2';
-    }
-  }
-
-  // Initialize all features
-  init() {
-    // Fetch visitor info
-    this.fetchVisitorInfo();
-    
-    // Update timestamp every second
-    setInterval(() => this.updateTimestamp(), 1000);
-    
-    // Monitor connection status
-    window.addEventListener('online', () => this.updateConnectionStatus());
-    window.addEventListener('offline', () => this.updateConnectionStatus());
-    
-    // Initial connection status
-    this.updateConnectionStatus();
-  }
-}
-
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  const visitorInfo = new VisitorInfo('visitor-info');
-  visitorInfo.init();
-});
+    fetchVisitorInfo();
+    updateConnectionStatus();
+    updateTimestamp();
+    setInterval(updateTimestamp, 1000);
+    window.addEventListener("online", updateConnectionStatus);
+    window.addEventListener("offline", updateConnectionStatus);
+})();
